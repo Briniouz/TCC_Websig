@@ -1,0 +1,51 @@
+WEBSIG — SUICÍDIO E VIOLÊNCIA AUTOPROVOCADA NO BRASIL (2020–2025)
+
+COMO ABRIR
+1. Extraia o ZIP inteiro para uma pasta no computador.
+2. Abra o arquivo index.html no navegador (Opera, Chrome, Edge ou Firefox).
+3. Aguarde alguns segundos para o mapa carregar na primeira abertura.
+4. Caso o fundo de satélite não apareça, clique no botão "Satélite"
+   para mudar para o fundo claro.
+   As feições e os dados funcionam sem conexão; o satélite usa internet.
+
+COMO USAR
+- Selecione SIM (óbitos por suicídio) ou SINAN (notificações de violência
+  autoprovocada); as bases são apresentadas separadamente.
+- Escolha 27 Unidades Federativas ou 120 macrorregiões de saúde.
+- Escolha taxa, sexo, raça/cor ou faixa etária. As cores e a legenda são
+  atualizadas automaticamente para a seleção atual.
+- O campo de período altera as TAXAS. Os percentuais das variáveis representam
+  a composição dos registros acumulados em 2020–2025.
+- Clique no território para abrir o painel de totais e percentuais detalhados;
+  as seções Sexo, Raça/cor e Faixa etária podem ser abertas separadamente.
+- A busca aceita nome de estado, nome da macrorregião e código territorial.
+
+LEITURA DOS DADOS
+- Taxa: registros por 100 mil habitantes, anual ou média anual do período.
+- Percentual: participação do grupo entre os registros daquele território
+  no período todo; não é taxa de risco da população daquele grupo.
+- Para as médias anuais, usam-se as cinco classes do mapa de taxas original
+  exportado pelo QGIS. Para taxas anuais e percentuais, usam-se cinco intervalos
+  iguais dentro da fonte e divisão territorial selecionadas; por isso as
+  legendas podem mudar ao alterar a seleção.
+- Fonte conforme o projeto: SIM e SINAN/DATASUS, população IBGE.
+- As somas originais por UF e por macrorregião não são idênticas: SIM,
+  95.232 versus 95.215; SINAN, 938.560 versus 938.398. O WebSIG preserva
+  os valores de cada recorte. UF e macrorregião são duas divisões dos mesmos
+  registros; não se devem somar os dois resultados como eventos distintos.
+
+INTEGRIDADE E ATUALIZAÇÃO
+- Esta é uma cópia estática gerada da exportação qgis2web de 26/09/2026.
+  Alterações posteriores no projeto QGIS NÃO aparecem automaticamente aqui.
+- O arquivo uniu os indicadores do SIM e do SINAN pelo código territorial,
+  mantendo separadas as medidas das duas fontes e sem alterar as planilhas.
+- A geometria da versão web foi levemente generalizada para abrir mais rápido;
+  use a malha original do QGIS para análises espaciais e medidas precisas.
+- Para atualizar o site com uma nova exportação, é preciso reconstruir os
+  arquivos dentro de data/ e conferir as classes, os códigos e os campos.
+
+CONFERÊNCIA RÁPIDA
+- UF / SIM / taxa média: Mato Grosso: 1.812 óbitos; 8,05 por 100 mil.
+- Macrorregiões / SIM / faixa 15–29: Serra (RS), código 4310: 20,08%.
+
+Elaboração: Daniel Carvalho Oliveira da Silva, 2026.

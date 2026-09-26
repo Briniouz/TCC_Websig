@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102536">
+  <meta name="description" content="Atlas interativo de suicídio e notificações de violência autoprovocada no Brasil, 2020 a 2025.">
+  <title>Atlas da violência autoprovocada e do suicídio | Brasil 2020–2025</title>
+  <link rel="stylesheet" href="css/leaflet.css">
+  <link rel="stylesheet" href="css/websig.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">◈</span><div><strong>Atlas de Saúde</strong><span>Brasil · 2020–2025</span></div></div>
+      <div class="topbar-title"><strong>Violência autoprovocada e suicídio</strong><span>Exploração por território e perfil dos registros</span></div>
+      <div class="topbar-right">TCC · Geoprocessamento <span class="topbar-dot" aria-hidden="true"></span> 2026</div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar" aria-label="Controles do mapa">
+        <div class="sidebar-intro"><span class="eyebrow">EXPLORAR OS DADOS</span><h1>Monte sua visualização</h1><p>Escolha a fonte, o recorte e a variável que deseja analisar.</p></div>
+
+        <div class="control-group">
+          <label for="source">Fonte dos registros</label>
+          <select id="source"><option value="sim">SIM · óbitos por suicídio</option><option value="sinan">SINAN · notificações de violência autoprovocada</option></select>
+        </div>
+        <div class="control-group">
+          <label for="scale">Divisão territorial</label>
+          <select id="scale"><option value="uf">Unidades Federativas · 27</option><option value="macro">Macrorregiões de saúde · 120</option></select>
+        </div>
+        <div class="control-group">
+          <label for="metric">Indicador do mapa</label>
+          <select id="metric">
+            <optgroup label="Ocorrência"><option value="rate">Taxa por 100 mil habitantes</option></optgroup>
+            <optgroup label="Sexo · percentual dos registros"><option value="masc">Masculino</option><option value="fem">Feminino</option><option value="sexo_ign">Sexo ignorado</option></optgroup>
+            <optgroup label="Raça/cor · percentual dos registros"><option value="branca">Branca</option><option value="preta">Preta</option><option value="parda">Parda</option><option value="amarela">Amarela</option><option value="indigena">Indígena</option><option value="raca_ign">Raça/cor ignorada</option></optgroup>
+            <optgroup label="Faixa etária · percentual dos registros"><option value="0_14">0 a 14 anos</option><option value="15_29">15 a 29 anos</option><option value="30_49">30 a 49 anos</option><option value="50_59">50 a 59 anos</option><option value="60_mais">60 anos ou mais</option><option value="idade_ign">Idade ignorada</option></optgroup>
+          </select>
+        </div>
+        <div class="control-group" id="periodGroup"><label for="period">Período da taxa</label><select id="period"><option value="all">Média anual · 2020–2025</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option></select></div>
+
+        <section class="legend-card" aria-labelledby="legend-title">
+          <div class="legend-top"><span class="eyebrow">LEGENDA</span><span class="legend-unit" id="legend-unit">por 100 mil hab.</span></div>
+          <h2 id="legend-title">Taxa média anual</h2>
+          <div id="legend-classes" class="legend-classes" aria-live="polite"></div>
+          <p class="legend-caption" id="legend-caption"></p>
+        </section>
+
+        <div class="sidebar-bottom"><p id="interpretation">Cores mais intensas indicam taxas mais altas no território selecionado.</p><p class="data-note">Os percentuais representam a composição dos registros. Eles não medem o risco da população de cada grupo.</p></div>
+      </aside>
+
+      <main class="map-shell">
+        <div id="map" role="application" aria-label="Mapa interativo do Brasil"></div>
+        <div class="map-tools"><div class="search-box"><label for="placeSearch" class="sr-only">Buscar estado ou macrorregião</label><span aria-hidden="true">⌕</span><input id="placeSearch" list="places" placeholder="Buscar território..." autocomplete="off"><datalist id="places"></datalist><button id="searchButton" type="button" aria-label="Ir ao território">Ir</button></div><div id="searchStatus" class="search-status" role="status" aria-live="polite"></div></div>
+        <div class="map-foot"><div class="map-context"><strong id="context-title">Óbitos por suicídio · UFs</strong><span id="context-subtitle">Taxa média anual por 100 mil habitantes</span></div><button id="basemapButton" type="button" aria-pressed="true">◐ &nbsp; Satélite</button></div>
+        <div id="loading" class="loading" role="status">Preparando o mapa...</div>
+      </main>
+    </div>
+
+    <footer class="footer"><span>Fonte: SIM e SINAN/DATASUS; população IBGE. Elaboração: Daniel Carvalho Oliveira da Silva, 2026.</span><span>Selecione um território para ver os detalhes.</span></footer>
+  </div>
+  <script src="js/leaflet.js"></script>
+  <script src="data/uf.js"></script>
+  <script src="data/macro.js"></script>
+  <script src="js/websig.js"></script>
+</body>
+</html>
