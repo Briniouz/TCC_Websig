@@ -39,10 +39,20 @@
     ignored:['#f1f4f5','#d8e2e4','#b9c9cd','#829fa7','#426675']
   };
   const FIXED_RATE = {
-    sim:{uf:[4.48159,5.87537,7.771153,9.41902,11.803,13.564],
+    sim:{uf:[3,6,8,9.5,12,15],
          macro:[1.471797,6.251295,8.984564,11.627647,14.84874,19.20331]},
     sinan:{uf:[16.97868,32.16,57.197867,75.357646,142.89,191.22561],
            macro:[12.58925,37.29,71.91723,99.487221,139.45,191.22561]}
+  };
+           const ANNUAL_RATE = {
+   sim: {
+    uf: [3, 6, 8, 9.5, 12, 15],
+    macro: [1, 6.5, 9, 11.5, 15, 22]
+  },
+  sinan: {
+    uf: [6, 37, 72, 99, 139, 246],
+    macro: [2.5, 37, 72, 99, 139, 292]
+  }
   };
   const YEARS = [2020,2021,2022,2023,2024,2025];
   let layer = null;
@@ -76,6 +86,7 @@
 
   function makeBreaks(s){
     if (isRate(s) && s.period === 'all') return FIXED_RATE[s.source][s.scale];
+    if (isRate(s)) return ANNUAL_RATE[s.source][s.scale];
     const vals = datasets[s.scale].features.map(f=>metricOf(f,s)).filter(v=>Number.isFinite(v));
     if (!vals.length) return [0,1,2,3,4,5];
     const low = Math.min(...vals), high = Math.max(...vals);
@@ -136,9 +147,11 @@
       const txt=document.createElement('span');txt.textContent=nf2.format(breaks[i])+' – '+nf2.format(breaks[i+1])+(isRate(s)?'':'%');
       row.append(sw,txt);return row;
     }));
-    els['legend-caption'].textContent=(isRate(s)&&s.period==='all')?
-      'Classes da simbologia original do QGIS para este mapa.':
-      'Cinco intervalos iguais calculados para a seleção atual.';
+   els['legend-caption'].textContent = isRate(s)
+  ? (s.period === 'all'
+      ? 'Classes da simbologia original do QGIS para este mapa.'
+      : 'Mesmas faixas em todos os anos e nas duas divisões territoriais desta fonte.')
+  : 'Cinco intervalos iguais calculados para a seleção atual.';
     els.interpretation.textContent=isRate(s)?
       'Cores mais intensas indicam taxas mais altas no território selecionado.':
       'Cores mais intensas indicam maior participação deste grupo entre os registros do território.';
