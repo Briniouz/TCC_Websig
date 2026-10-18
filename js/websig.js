@@ -39,20 +39,24 @@
     ignored:['#f1f4f5','#d8e2e4','#b9c9cd','#829fa7','#426675']
   };
   const FIXED_RATE = {
-    sim:{uf:[3,6,8,9.5,12,15],
-         macro:[1.471797,6.251295,8.984564,11.627647,14.84874,19.20331]},
-    sinan:{uf:[16.97868,32.16,57.197867,75.357646,142.89,191.22561],
-           macro:[12.58925,37.29,71.91723,99.487221,139.45,191.22561]}
+    sim: {
+      uf: [3, 6, 8, 9.5, 12, 15],
+      macro: [1, 6.5, 9, 11.5, 15, 22]
+    },
+    sinan: {
+      uf: [6, 37, 72, 99, 139, 246],
+      macro: [2.5, 37, 72, 99, 139, 292]
+    }
   };
-           const ANNUAL_RATE = {
-   sim: {
-    uf: [3, 6, 8, 9.5, 12, 15],
-    macro: [1, 6.5, 9, 11.5, 15, 22]
-  },
-  sinan: {
-    uf: [6, 37, 72, 99, 139, 246],
-    macro: [2.5, 37, 72, 99, 139, 292]
-  }
+  const ANNUAL_RATE = {
+    sim: {
+      uf: [3, 6, 8, 9.5, 12, 15],
+      macro: [1, 6.5, 9, 11.5, 15, 22]
+    },
+    sinan: {
+      uf: [6, 37, 72, 99, 139, 246],
+      macro: [2.5, 37, 72, 99, 139, 292]
+    }
   };
   const YEARS = [2020,2021,2022,2023,2024,2025];
   let layer = null;
@@ -60,7 +64,18 @@
   let breaks = null;
   let colors = P.rate;
 
-  const map = L.map('map',{preferCanvas:true,zoomControl:false,minZoom:3,maxZoom:12});
+  const map = L.map('map', {
+    preferCanvas: true,
+    zoomControl: false,
+    minZoom: 3,
+    maxZoom: 12,
+    // Área ampla, com margem para enquadrar o Brasil em telas largas.
+    maxBounds: [
+      [-75, -155], // canto sudoeste: latitude, longitude
+      [75, 50]    // canto nordeste: latitude, longitude
+    ],
+    maxBoundsViscosity: 1.0
+  });
   L.control.zoom({position:'topleft'}).addTo(map);
   map.fitBounds([[-34.2,-74.7],[5.7,-33.3]],{padding:[15,15]});
   const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
@@ -147,11 +162,9 @@
       const txt=document.createElement('span');txt.textContent=nf2.format(breaks[i])+' – '+nf2.format(breaks[i+1])+(isRate(s)?'':'%');
       row.append(sw,txt);return row;
     }));
-   els['legend-caption'].textContent = isRate(s)
-  ? (s.period === 'all'
-      ? 'Classes da simbologia original do QGIS para este mapa.'
-      : 'Mesmas faixas em todos os anos e nas duas divisões territoriais desta fonte.')
-  : 'Cinco intervalos iguais calculados para a seleção atual.';
+    els['legend-caption'].textContent = isRate(s)
+      ? 'Faixas padronizadas para os anos e a média anual desta fonte e divisão territorial.'
+      : 'Cinco intervalos iguais calculados para a seleção atual.';
     els.interpretation.textContent=isRate(s)?
       'Cores mais intensas indicam taxas mais altas no território selecionado.':
       'Cores mais intensas indicam maior participação deste grupo entre os registros do território.';
