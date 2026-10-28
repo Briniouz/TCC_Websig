@@ -5,7 +5,7 @@
   const datasets = {uf: window.WEBSIG_UF, macro: window.WEBSIG_MACRO};
   const els = Object.fromEntries(['source','scale','metric','period','periodGroup',
     'legend-title','legend-unit','legend-classes','legend-caption','interpretation',
-    'placeSearch','places','searchButton','searchStatus','context-title',
+    'context-title',
     'context-subtitle','basemapButton','loading'].map(id => [id, document.getElementById(id)]));
   if (!datasets.uf || !datasets.macro || datasets.uf.features.length !== 27 ||
       datasets.macro.features.length !== 120) {
@@ -173,33 +173,6 @@
       (s.period==='all'?'Taxa média anual por 100 mil habitantes':'Taxa por 100 mil habitantes em '+s.period):
       'Percentual dos registros · '+LABELS[s.metric]+' · 2020–2025';
   }
-  function normalize(value){return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[_\s-]+/g,' ').trim();}
-  function displaySearch(p,s){return p.name+(s.scale==='macro'?' — '+p.uf:'');}
-  function updateSearch(s){
-    els.placeSearch.value='';els.searchStatus.textContent='';
-    els.places.replaceChildren(...datasets[s.scale].features.map(f=>{
-      const option=document.createElement('option');option.value=displaySearch(f.properties,s);return option;
-    }));
-    els.placeSearch.placeholder=s.scale==='uf'?'Buscar estado...':'Buscar macrorregião ou UF...';
-  }
-  function search(){
-    const q=normalize(els.placeSearch.value),s=state();
-    if (!q){els.searchStatus.textContent='Digite um território para buscar.';return;}
-    const matches=[];
-    layer.eachLayer(l=>{
-      const p=l.feature.properties;
-      const label=normalize(displaySearch(p,s));
-      if (label===q || label.includes(q) || String(p.code)===q) matches.push(l);
-    });
-    if (!matches.length){els.searchStatus.textContent='Território não encontrado nesta divisão.';return;}
-    if (matches.length>1 && !matches.some(l=>normalize(displaySearch(l.feature.properties,s))===q)){
-      els.searchStatus.textContent=matches.length+' resultados. Escolha um nome completo na lista.';return;
-    }
-    const result=matches.find(l=>normalize(displaySearch(l.feature.properties,s))===q)||matches[0];
-    els.searchStatus.textContent='';
-    map.fitBounds(result.getBounds(),{maxZoom:s.scale==='uf'?7:9,padding:[25,25]});
-    result.openPopup();
-  }
   function render(){
     const s=state();
     const rate=isRate(s);els.period.disabled=!rate;
@@ -210,15 +183,12 @@
       if (layer) map.removeLayer(layer);
       activeScale=s.scale;
       layer=L.geoJSON(datasets[s.scale],{style,onEachFeature:bindFeature,renderer:L.canvas({padding:.5})}).addTo(map);
-      updateSearch(s);
     } else {
       map.closePopup();layer.setStyle(style);
     }
     renderLegend(s);
   }
   ['source','scale','metric','period'].forEach(id=>els[id].addEventListener('change',render));
-  els.searchButton.addEventListener('click',search);
-  els.placeSearch.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search();}});
   els.basemapButton.addEventListener('click',()=>{
     const active=map.hasLayer(satellite);
     if(active) map.removeLayer(satellite);else satellite.addTo(map);
